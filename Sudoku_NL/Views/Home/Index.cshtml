@@ -80,7 +80,7 @@
                 url: "@Url.Action("GetSelectedCell", "Home")",
                 data: {i: i, j: j},
                 success: function (msg) {
-                    document.getElementById("PossibleString").innerHTML = msg;
+                    document.getElementById("PossibleString").innerHTML = msg.split(",");
                     console.log("OnCellSelected on true");
                 }
             });
@@ -199,10 +199,10 @@
 </script>
 @* Chỗ này là thân index nè *@
 <div class="container">
-    <h1 class="display-4">Game Sudoku</h1>
+    <h1 class="display-4 text-center">Game Sudoku</h1>
 
     <div class="content row">
-        <div class="box">
+        <div class="box1">
             @if (Model != null)
             {
                 <p id="test"></p>
@@ -249,26 +249,49 @@
             }
         </div>
 
-        <div class="box">
-            <input id="BtnNewGame" class="btn" type="button" value="New Game" onclick="OnNewGameClick()" />
-            <input id="BtnSolve" class="btn" type="button" value="Solve" onclick="OnSolveClick()" />
-            <input id="BtnCheckOneCell" class="btn" type="button" value="Check One Cell" onclick="OnCheckOneCell()" />
-            <input id="BtnReset" class="btn" type="button" value="Reset Cells" onclick="ResetCell()" />
+        <div class="box2">
 
-            <div>
+            <div class="choose row">
+                <p class="choose-text">Chọn mức độ:</p>
                 <form>
-                    <input type="radio" id="easy" name="gender">
-                    <label for="easy">Dễ ẹt</label><br>
-                    <input type="radio" id="medium" name="gender">
-                    <label for="medium">Vừa thôi</label><br>
-                    <input type="radio" id="difficult" name="difficult">
-                    <label for="difficult">Khó lắm đó</label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="easy" value="">
+                        <label class="form-check-label" for="easy">Dễ</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="medium" value="">
+                        <label class="form-check-label" for="medium">Vừa thôi</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="difficult" value="">
+                        <label class="form-check-label" for="difficult">Khó á</label>
+
+                    </div>
                 </form>
+
+                <input id="BtnNewGame" class="btn btn-primary newgame" type="button" value="New Game" onclick="OnNewGameClick()" />
             </div>
 
-            <input type="file" id="myfile" class="required" />
-            <button type="button" value="Load Game" class="btn btn-info" onclick="uploadFiles()">Load File</button>
-            <a asp-action="TestFile" asp-controller="Home">Down File</a>
+            <div class="choose row">
+                <p class="choose-text">Tải tập tin lên</p>
+                <input type="file" id="myfile" class="required" />
+                <button type="button" value="Load Game" class="btn btn-info" onclick="uploadFiles()">Load File</button>
+            </div>
+
+
+            <div class="choose row">
+                <p class="choose-text">Điều khiển trò chơi</p>
+                <input id="BtnSolve" class="btn btn-primary" type="button" value="Solve" onclick="OnSolveClick()" />
+                <input id="BtnCheckOneCell" class="btn btn-primary" type="button" value="Check One Cell" onclick="OnCheckOneCell()" />
+                <input id="BtnReset" class="btn btn-primary" type="button" value="Reset Cells" onclick="ResetCell()" />
+            </div>
+
+
+            <div class="choose row">
+                <p class="choose-text">Xuất thành tập tin</p>
+                <a class="btn btn-success" asp-action="TestFile" asp-controller="Home">Tải về</a>
+            </div>
+
         </div>
     </div>
  
