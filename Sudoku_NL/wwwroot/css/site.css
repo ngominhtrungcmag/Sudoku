@@ -74,7 +74,7 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-.GameGrid{
+/*.GameGrid{
     margin-left:auto;
     margin-right:auto;
 }
@@ -88,9 +88,50 @@ body {
         width: 40px;
         height: 40px;
         text-align: center;
-    }
+    }*/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+
+table {
+    border: 2px solid #000000;
+}
+
+td {
+    border: 1px solid #000000;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px;
+}
+
+input {
+    color: #000000;
+    padding: 0;
+    border: 0;
+    text-align: center;
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    background-color: #FFFFFF;
+    outline: none;
+}
+
+    input:disabled {
+        background-color: #EEEEEE;
+    }
+
+
+content{
+    display: flex;
+}
+
+row{
+    flex-direction: row;
+}
+box {
+    width: 500px;
+    height: 300px;
 }
