@@ -71,13 +71,13 @@
             var j = res[1];
 
             var val = cell.value;
-            //val = val.replace(/[^\d]/, '');
-            //val = val.substring(0, 1);
-            //cell.value = val;
+            val = val.replace(/[^\d]/, '');
+            val = val.substring(0, 1);
+            cell.value = val;
 
         var Possible = document.getElementById("PossibleString").innerHTML;
-        if (Possible.includes(val)) {
-            if (val) {
+        if (val == "") { val = "0"; }
+        if (Possible.includes(val) || val == "0") {
                 $.ajax({
                     type: 'POST',
                     dataType: "text",
@@ -89,13 +89,10 @@
                         //alert("This");
                     }
                 });
-            }
-            else {
-                cell.style.color = "red";
-            }
         }
         else {
             alert("Vui lòng nhập đúng như trong gợi ý");
+            cell.value = 0;
         }
 
     }
@@ -243,8 +240,8 @@
             </form>*@
 
             <input type="file" id="myfile" class="required" />
-            <button type="button" value="Load Game" class="btn btn-info" onclick="uploadFiles()" />
-
+            <button type="button" value="Load Game" class="btn btn-info" onclick="uploadFiles()">Load File</button>
+            <a asp-action="TestFile" asp-controller="Home">Down File</a>
         }
         else
         {

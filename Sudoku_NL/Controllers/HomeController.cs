@@ -53,7 +53,6 @@ namespace Sudoku_NL.Controllers
         public ActionResult GetCellValue(int i, int j, string val)
         {
             int value = Int32.Parse(val);
-            if (value != 0)
             {
                 SudokuModels.SudokuGame.Cells[i, j].Value = value;
                 SudokuModels.SudokuGame.UpdatePossible();
@@ -61,7 +60,6 @@ namespace Sudoku_NL.Controllers
             }
             return RedirectToAction("Index");
         }
-
 
         [HttpPost]
         public ActionResult PostNewGame(int difficult)
@@ -89,6 +87,34 @@ namespace Sudoku_NL.Controllers
             }
             SudokuModels.SudokuGame.LoadFile(filePath);
             return RedirectToAction("Index");
+        }
+        #endregion
+
+
+        #region Down File
+        [HttpGet]
+        public ActionResult TestFile()
+        {
+            Console.WriteLine("Run TestFile");
+            MemoryStream memoryStream = new MemoryStream();
+            TextWriter tw = new StreamWriter(memoryStream);
+            for (int i = 0; i < 9; i++)
+            {
+                string str = "";
+                for (int j = 0; j < 9; j++)
+                {
+                    str += SudokuModels.SudokuGame.Cells[i, j].Value.ToString() + " ";
+                }
+                tw.WriteLine(str.Trim());
+            }
+            tw.Flush();
+
+            var length = memoryStream.Length;
+            tw.Close();
+            var toWrite = new byte[length];
+            Array.Copy(memoryStream.GetBuffer(), 0, toWrite, 0, length);
+
+            return File(toWrite, "text/plain", "SaveSudoku.txt");
         }
         #endregion
         [HttpPost]

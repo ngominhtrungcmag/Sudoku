@@ -91,9 +91,10 @@ namespace Sudoku_NL.Models
                         string[] numbersString = line.Split(unwanted);
                         foreach (string a in numbersString)
                         {
-                            if (Int32.Parse(a) != 0)
+                            var number = a.Trim();
+                            if (number != "" && Int32.Parse(number) != 0)
                             {
-                                Cells[row, column].Value = Int32.Parse(a);
+                                Cells[row, column].Value = Int32.Parse(number);
                                 Cells[row, column].ReadOnly = true;
                             }
                             column++;
