@@ -9,8 +9,31 @@
 //
     $(document).ready(function () {
        // ResetPossible();
+        BorderGird();
     });
-//
+// css gird
+    function BorderGird() {
+        for (var i = 0; i < 9; i++) {
+            document.getElementById("0_" + i).style.borderTop = "2px solid #000000";
+            document.getElementById("3_" + i).style.borderTop = "2px solid #000000";
+            document.getElementById("6_" + i).style.borderTop = "2px solid #000000";
+
+            document.getElementById(i+ "_0").style.borderLeft = "2px solid #000000";
+            document.getElementById(i + "_3").style.borderLeft = "2px solid #000000";
+            document.getElementById(i + "_6").style.borderLeft = "2px solid #000000";
+
+            document.getElementById(i + "_2").style.borderRight = "2px solid #000000";
+            document.getElementById(i + "_5").style.borderRight = "2px solid #000000";
+            document.getElementById(i + "_8").style.borderRight = "2px solid #000000";
+
+            document.getElementById("2_" + i).style.borderBottom = "2px solid #000000";
+            document.getElementById("5_" + i).style.borderBottom = "2px solid #000000";
+            document.getElementById("8_" + i).style.borderBottom = "2px solid #000000";
+        }
+    }
+
+
+ //
     function test() {
         var CellSelected = @Model.SelectedCell.Value;
         if (CellSelected != 0) {
@@ -175,52 +198,63 @@
 
 </script>
 @* Chỗ này là thân index nè *@
-<div class="text-center">
+<div class="container">
     <h1 class="display-4">Game Sudoku</h1>
 
-    <div class="text-center">
-        @if (Model != null)
-        {
-            <p id="test"></p>
-            <p id="PossibleString"></p>
-            <table class="GameGrid">
-                @for (int i = 0; i < 9; i++)
-                {
-                    var btnId = "btn" + i;
-                    var btnVal = (i + 1).ToString();
-                    <tr>
-                        @for (int j = 0; j < 9; j++)
-                        {
-                            var val = Model.Cells[i, j].Value;
-                            var id = i.ToString() + "_" + j.ToString();
+    <div class="content row">
+        <div class="box">
+            @if (Model != null)
+            {
+                <p id="test"></p>
+                <p id="PossibleString"></p>
+                <table class="GameGrid">
+                    @for (int i = 0; i < 9; i++)
+                    {
+                        var btnId = "btn" + i;
+                        var btnVal = (i + 1).ToString();
+                        <tr>
+                            @for (int j = 0; j < 9; j++)
+                            {
+                                var val = Model.Cells[i, j].Value;
+                                var id = i.ToString() + "_" + j.ToString();
 
-                            if (Model.Cells[i, j].ReadOnly == true)
-                            {
-                                <td class="GameCell">
-                                    <input id="@id" type="number" disabled value="@val" class="GameCellText" />
-                                </td>
+                                if (Model.Cells[i, j].ReadOnly == true)
+                                {
+                                    <td class="GameCell">
+                                        <input id="@id" type="number" disabled value="@val" class="GameCellText" />
+                                    </td>
+                                }
+                                else if (val == 0)
+                                {
+                                    <td class="GameCell">
+                                        <input id="@id" type="number" min="1" max="9" class="GameCellText" onclick="OnCellSelected(this)" oninput="OnCellInput(this)" />
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="GameCell">
+                                        <input id="@id" type="number" value="@val" min="1" max="9" class="GameCellText" onclick="OnCellSelected(this)" oninput="OnCellInput(this)" />
+                                    </td>
+                                }
                             }
-                            else if (val == 0)
-                            {
-                                <td class="GameCell">
-                                    <input id="@id" type="number" min="1" max="9" class="GameCellText" onclick="OnCellSelected(this)" oninput="OnCellInput(this)" />
-                                </td>
-                            }
-                            else
-                            {
-                                <td class="GameCell">
-                                    <input id="@id" type="number" value="@val" min="1" max="9" class="GameCellText" onclick="OnCellSelected(this)" oninput="OnCellInput(this)" />
-                                </td>
-                            }
-                        }
 
-                    </tr>
-                }
-            </table>
-            <input id="BtnNewGame" type="button" value="New Game" onclick="OnNewGameClick()" />
-            <input id="BtnSolve" type="button" value="Solve" onclick="OnSolveClick()" />
-            <input id="BtnCheckOneCell" type="button" value="Check One Cell" onclick="OnCheckOneCell()" />
-            <input id="BtnReset" type="button" value="Reset Cells" onclick="ResetCell()" />
+                        </tr>
+                    }
+                </table>
+
+            }
+            else
+            {
+                <p>Doan nay chung to Model null</p>
+            }
+        </div>
+
+        <div class="box">
+            <input id="BtnNewGame" class="btn" type="button" value="New Game" onclick="OnNewGameClick()" />
+            <input id="BtnSolve" class="btn" type="button" value="Solve" onclick="OnSolveClick()" />
+            <input id="BtnCheckOneCell" class="btn" type="button" value="Check One Cell" onclick="OnCheckOneCell()" />
+            <input id="BtnReset" class="btn" type="button" value="Reset Cells" onclick="ResetCell()" />
+
             <div>
                 <form>
                     <input type="radio" id="easy" name="gender">
@@ -232,20 +266,10 @@
                 </form>
             </div>
 
-
-
-            @*<form method="post" enctype="multipart/form-data">
-                <input id="FileGame" type="file" name="file" />
-                <input type="button" value="LoadFile" onclick="UploadFile()" />
-            </form>*@
-
             <input type="file" id="myfile" class="required" />
             <button type="button" value="Load Game" class="btn btn-info" onclick="uploadFiles()">Load File</button>
             <a asp-action="TestFile" asp-controller="Home">Down File</a>
-        }
-        else
-        {
-            <p>Doan nay chung to Model null</p>
-        }
+        </div>
     </div>
+ 
 </div>
