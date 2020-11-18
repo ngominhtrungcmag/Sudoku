@@ -13,6 +13,7 @@ namespace Sudoku_NL.Models
 {
     public class Sudoku
     {
+
         public Cell[,] Cells = new Cell[9, 9];
         public Cell[,] CellsRoot = new Cell[9, 9];
         public Cell[,] Result = new Cell[9, 9];
@@ -26,14 +27,13 @@ namespace Sudoku_NL.Models
         int countResult = 0;
         public bool Creating = false;
 
+        //Khởi tạo Sudoku
         public Sudoku()
         {
+            //Cài dặt giá trị ban đầu cho các Cell Sudoku.
             Clear();
             ClearResult();
             ClearCellsRoot();
-            //DifficultyCells.Add(Difficulty.Easy, 30);
-            //DifficultyCells.Add(Difficulty.Medium, 40);
-            //DifficultyCells.Add(Difficulty.Hard, 50);
         }
 
         public Sudoku(Sudoku source)
@@ -56,6 +56,7 @@ namespace Sudoku_NL.Models
             }
         }
 
+        //Khôi phục trạng thái ban đầu của Sudoku
         public void Reset()
         {
             for (int i = 0; i < 9; i++)
@@ -68,23 +69,19 @@ namespace Sudoku_NL.Models
                 Console.WriteLine();
             }
         }
-        //Load sudoku
+        //Load sudoku từ file có sẵn
         public void LoadFile(string input)
         {
-            // List<string> list = new List<string>();
             Clear();
 
             char[] unwanted = new char[] { ' ' };
             try
             {
-
-                // Open the text file using a stream reader
+                // Mở file sử dụng stream reader
                 using (var reader = new StreamReader(input))
                 {
                     int row = 0;
-
                     string line = reader.ReadLine();
-
                     while (line != null)
                     {
                         int column = 0;
@@ -110,7 +107,6 @@ namespace Sudoku_NL.Models
                 Console.WriteLine("Không thể đọc file này :");
                 Console.WriteLine(e.Message);
             }
-
             SetReadOnly();
             for (int i = 0; i < 9; i++)
             {
@@ -122,7 +118,7 @@ namespace Sudoku_NL.Models
             }
         }
 
-        //New sudoku
+        //Trò chơi Sudoku mới.
         public void NewGame(int difficult)
         {
             Difficult = difficult;
@@ -149,19 +145,7 @@ namespace Sudoku_NL.Models
                 }
             }
         }
-        public void CreateNextSudoku(bool useThread)
-        {
-            nextSudoku = new Sudoku();
 
-            if (useThread)
-            {
-                nextSudoku.CreateSudokuThread();
-            }
-            else
-            {
-                nextSudoku.CreateSudoku();
-            }
-        }
         public void SetReadOnly()
         {
             for (int i = 0; i < 9; i++)
@@ -173,11 +157,6 @@ namespace Sudoku_NL.Models
             }
         }
 
-        public void CreateSudokuThread()
-        {
-            Thread thread = new Thread(CreateSudoku);
-            thread.Start();
-        }
 
         public void CreateSudoku()
         {
@@ -190,20 +169,7 @@ namespace Sudoku_NL.Models
             solution = new Sudoku(this);
         }
 
-        public bool IsValidPossibles(int row)
-        {
-            bool valid = true;
-            for (int j = 0; j < 9; j++)
-            {
-                if (Cells[row, j].Possible.Count == 0 && Cells[row, j].Value == 0)
-                {
-                    valid = false;
-                }
-            }
-            return valid;
-        }
-
-
+        //Cập nhật giá trị có thể điền vào ô số Sudoku
         public void UpdatePossible()
         {
             for (int i = 0; i < 9; i++)
@@ -213,104 +179,14 @@ namespace Sudoku_NL.Models
                     Cells[i, j].Possible = GetFullList();
                     for (int k = 1; k <= 9; k++)
                     {
-                        if (!feasible(Cells, i, j, k))
+                        if (!Feasible(Cells, i, j, k))
                         {
                             Cells[i, j].Possible.Remove(k);
                         }
                     }
                 }
             }
-
-
         }
-
-        //public void UpdateRowPossibles(int row)
-        //{
-        //    List<int> rowValues = new List<int>();
-
-        //    for (int i = 0; i < 9; i++)
-        //    {
-        //        if (Cells[row, i].Value > 0)
-        //        {
-        //            rowValues.Add(Cells[row, i].Value);
-        //        }
-        //    }
-
-        //    for (int i = 0; i < 9; i++)
-        //    {
-        //        //Cells[row, i].Possibles = GetFullList();
-        //        Cells[row, i].Possible.RemoveAll(m => rowValues.Contains(m) && m != Cells[row, i].Value);
-
-        //        //Console.Write("Row " + row + " [ " + row + i + "] :");
-        //        //Cells[row, i].Possible.ForEach(Console.Write);
-        //        //Console.WriteLine();
-        //        //Cells [row, i].Highlight = (SelectedCell != null && SelectedCell.Row == row);
-        //    }
-        //}
-
-        //public void UpdateColumnPossibles(int row)
-        //{
-        //    List<int> rowValues = new List<int>();
-
-        //    for (int i = 0; i < 9; i++)
-        //    {
-        //        if (Cells[i, row].Value > 0)
-        //        {
-        //            rowValues.Add(Cells[i, row].Value);
-        //        }
-
-        //    }
-
-        //    for (int i = 0; i < 9; i++)
-        //    {
-        //        //Cells[i, row].Possibles = GetFullList();
-        //        Cells[i, row].Possible.RemoveAll(m => rowValues.Contains(m) && m != Cells[i, row].Value);
-
-        //        //Console.Write("Col " + row + " [ " + i + row + "] :");
-        //        //Cells[i, row].Possible.ForEach(Console.Write);
-        //        //Console.WriteLine();
-        //        //Cells[i, row].Highlight = (SelectedCell != null && SelectedCell.Column == row);
-        //    }
-        //}
-
-        //public void UpdateBoxPossibles(int box)
-        //{
-        //    for (int j = 0; j < 9; j++)
-        //    {
-        //        for (int k = 0; k < 9; k++)
-        //        {
-        //            List<int> boxValues = GetValuesInBox(Cells[j, k].Box);
-        //            Cells[j, k].Possible.RemoveAll(m => boxValues.Contains(m) && m != Cells[j, k].Value);
-
-        //            //Console.Write("box " + box + " [ " + j + k + "] :");
-        //            //Cells[j, k].Possible.ForEach(Console.Write);
-        //            //Console.WriteLine();
-        //        }
-        //    }
-        //}
-
-
-        //private List<int> GetValuesInBox(int box)
-        //{
-        //    List<int> boxValues = new List<int>();
-
-        //    for (int i = 0; i < 9; i++)
-        //    {
-        //        for (int j = 0; j < 9; j++)
-        //        {
-        //            if (Cells[i, j].Box == box && Cells[i, j].Value != 0)
-        //            {
-        //                boxValues.Add(Cells[i, j].Value);
-        //            }
-        //            else
-        //            {
-
-        //            }
-        //        }
-        //    }
-
-        //    return boxValues;
-        //}
 
 
         public void Clear()
@@ -379,6 +255,7 @@ namespace Sudoku_NL.Models
         public bool CheckOneCell(int i, int j)
         {
             bool valid = true;
+            countResult = 0;
             SolveSudoku(Cells, 0, 0);
 
             if ((Cells[i,j].Value != 0) && (Cells[i,j].Value != Result[i, j].Value))
@@ -388,6 +265,7 @@ namespace Sudoku_NL.Models
             return valid;
         }
 
+        
         public void CreateRandom()
         {
             countResult = 0;
@@ -458,7 +336,6 @@ namespace Sudoku_NL.Models
             }
 
         }
-
         public void FillDiagonal()
         {
             Console.WriteLine("Run FillDiagonal...");
@@ -481,16 +358,19 @@ namespace Sudoku_NL.Models
                             }
 
                         }
-                        while (feasible(Cells, k + i, k + j, Cells[k + i, k + j].Value));  
+                        while (Feasible(Cells, k + i, k + j, Cells[k + i, k + j].Value));  
                     }
                 }
             }    
         }
+
         //List of 1 - 9 
         private List<int> GetFullList()
         {
             return new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         }
+
+        //Xuất ra dãy sudoku
         public string GetSudokuString()
         {
             string str = String.Empty;
@@ -506,9 +386,10 @@ namespace Sudoku_NL.Models
 
         //Này quan trọng nè: giải thuật giải sudoku
 
-        public void SolveGame()
+        public bool SolveGame()
         {
             countResult = 0;
+            bool validResult = true;
             Console.WriteLine("-----Giai game ne--------");
             for (int i = 0; i < 9; i++)
             {
@@ -521,18 +402,42 @@ namespace Sudoku_NL.Models
             ClearResult();
             SolveSudoku(Cells, 0, 0);
             Console.WriteLine("AfterSolveGame...");
+
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    Cells[i, j].CopyCell(Result[i, j]);
-                    Console.Write(Cells[i, j].Value + " ");
+                    if (Result[i, j].Value == 0)
+                    {
+                        validResult = false;
+                        break;
+                    }
                 }
-                Console.WriteLine();
             }
+            Console.WriteLine(validResult);
+            if (validResult)
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        //Cells[i, j].CopyCell(Result[i, j]);
+                        Cells[i, j].Value = Result[i, j].Value;
+                        UpdatePossible();
+                        Console.Write(Cells[i, j].Value + " ");
+                    }
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                return validResult;
+            }
+            
+            return validResult;
         }
 
-
+        //Giải sudoku
         public void SolveSudoku(Cell[,] CellsSolve, int x, int y)
         {
             if (countResult > 0)
@@ -567,7 +472,7 @@ namespace Sudoku_NL.Models
                 int k = 0;
                 for (k = 1; k <= 9; k++)
                 {
-                    if (feasible(CellsSolve, x, y, k))
+                    if (Feasible(CellsSolve, x, y, k))
                     {
                         CellsSolve[x, y].Value = k;
                         SolveSudoku(CellsSolve, x, y + 1);
@@ -582,58 +487,8 @@ namespace Sudoku_NL.Models
             //  Console.WriteLine(" End SolveSudoku" + x + " " + y);
         }
 
-        //public void SolveSudoku(int x, int y)
-        //{
-        //    if (countResult > 0)
-        //    {
-        //        return;
-        //    }
-        //    else if (y == 9)
-        //    {
-        //        if (x == 8)
-        //        {
-        //            countResult++;
-        //            //Console.WriteLine("Solution");
-        //            for (int i = 0; i < 9; i++)
-        //            {
-        //                for (int j = 0; j < 9; j++)
-        //                {
-        //                      Result[i, j].Value = Cells[i, j].Value;
-        //                     // Console.Write(Cells[i, j].Value + " ");
-        //                }
-        //                Console.WriteLine("");
-        //            }
-        //            // System.Environment.Exit(0);
-        //            return;
-        //        }
-        //        else
-        //        {
-        //            SolveSudoku(x + 1, 0);
-        //        }
-        //    }
-        //    else if (Cells[x, y].Value == 0)
-        //    {
-        //        //for (int k = 1; k <= 9; k++)
-        //        foreach (int k in Cells[x,y].Possible)
-        //        {
-        //            if (feasible(Cells, x, y, k))
-        //            {
-        //                Cells[x, y].Value = k;
-        //                UpdatePossible();
-        //                SolveSudoku(x, y + 1);
-        //                Cells[x, y].Value = 0;
-        //                UpdatePossible();
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        SolveSudoku(x, y + 1);
-        //    }
-        //    //  Console.WriteLine(" End SolveSudoku" + x + " " + y);
-        //}
-
-        public bool feasible(Cell[,] CellsSolve, int x, int y, int k)
+        //Kiểm tra hợp lệ
+        public bool Feasible(Cell[,] CellsSolve, int x, int y, int k)
         {
             int i = 0, j = 0;
             
@@ -701,7 +556,6 @@ namespace Sudoku_NL.Models
 
             return box;
         }
-
     }
 
 }
