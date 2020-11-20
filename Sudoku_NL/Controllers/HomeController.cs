@@ -125,21 +125,19 @@ namespace Sudoku_NL.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostSolve()
+        public string PostSolve()
         {
             Console.WriteLine("PostSolve");
-            SudokuModels.SudokuGame.SolveGame();
-
-            //for (int i = 0; i < 9; i++)
-            //{
-            //    for (int j =0; j < 9; j++)
-            //    {
-            //        Console.Write(SudokuModels.SudokuGame.Cells[i, j].Value);
-            //        SudokuModels.SudokuGame.Cells[i, j].CopyCell(SudokuModels.SudokuGame.Result[i, j]);
-            //    }
-            //    Console.WriteLine();
-            //}    
-            return RedirectToAction("Index");
+            bool validResult = SudokuModels.SudokuGame.SolveGame();
+            Console.WriteLine("This is validResult Controller: "+ validResult);
+            if (validResult)
+            {
+                return "Giải thành công!";
+            }
+            else
+            {
+                return "Giải không thành công!";
+            }
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

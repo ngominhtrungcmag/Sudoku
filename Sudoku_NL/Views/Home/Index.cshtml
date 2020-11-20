@@ -160,9 +160,11 @@
                 type: 'POST',
                 url: "@Url.Action("PostSolve", "Home")",
                 data: {},
-                success: function ()
+                success: function (msg)
                 {
+
                     location.reload(true);
+                    alert(msg);
                     console.log("OnSolveClick true");
                 }
         });
@@ -294,5 +296,5 @@
 
         </div>
     </div>
- 
+
 </div>
