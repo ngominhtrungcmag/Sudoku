@@ -7,21 +7,27 @@ namespace Sudoku_NL.Models
 {
     public class Cell
     {
-        public int Row {get; set;}
+        public int Row { get; set; }
         public int Column { get; set; }
-        public int Box { get; set; }
-
         public List<int> Possible = new List<int>();
         public string PossibleString
         {
             get
             {
                 var str = String.Empty;
-                foreach(int val in Possible)
+                foreach (int val in Possible)
                 {
                     str += val.ToString() + ",";
                 }
-                return str;
+                if (str != String.Empty)
+                {
+                    return str.Remove(str.Length - 1, 1);
+                }
+                else
+                {
+                    return str;
+                }
+
             }
         }
         private int _value;
@@ -32,7 +38,6 @@ namespace Sudoku_NL.Models
             set
             {
                 _value = value;
-                //OnPropertyChanged ("Value");
             }
         }
         public string Id
@@ -51,7 +56,7 @@ namespace Sudoku_NL.Models
 
         public Cell()
         {
-            for (int i = 1; i<=9; i++)
+            for (int i = 1; i <= 9; i++)
             {
                 Possible.Add(i);
             }
@@ -63,7 +68,6 @@ namespace Sudoku_NL.Models
             Value = source.Value;
             Row = source.Row;
             Column = source.Column;
-            Box = source.Box;
             ReadOnly = source.ReadOnly;
         }
     }

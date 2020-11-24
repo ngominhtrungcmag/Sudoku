@@ -31,8 +31,6 @@
             document.getElementById("8_" + i).style.borderBottom = "2px solid #000000";
         }
     }
-
-
  //
     function test() {
         var CellSelected = @Model.SelectedCell.Value;
@@ -84,7 +82,6 @@
                     console.log("OnCellSelected on true");
                 }
             });
-
     }
 //
     function OnCellInput(cell)
@@ -100,7 +97,7 @@
 
         var Possible = document.getElementById("PossibleString").innerHTML;
         if (val == "") { val = "0"; }
-        if (Possible.includes(val) || val == "0") {
+
                 $.ajax({
                     type: 'POST',
                     dataType: "text",
@@ -109,15 +106,32 @@
                     success: function () {
                         location.reload(true);
                         console.log("OnCellInput is true");
-                        //alert("This");
                     }
                 });
-        }
-        else {
-            alert("Vui lòng nhập đúng như trong gợi ý");
-            cell.value = 0;
-        }
+    }
+    function OnCellInput(cell)
+        {
+            var res = cell.id.split("_");
+            var i = res[0];
+            var j = res[1];
 
+            var val = cell.value;
+            val = val.replace(/[^\d]/, '');
+            val = val.substring(0, 1);
+            cell.value = val;
+
+        var Possible = document.getElementById("PossibleString").innerHTML;
+        if (val == "") { val = "0"; }
+                $.ajax({
+                    type: 'POST',
+                    dataType: "text",
+                    url: "@Url.Action("GetCellValue", "Home")",
+                    data: { i: i, j: j, val: val },
+                    success: function () {
+                        location.reload(true);
+                        console.log("OnCellInput is true");
+                    }
+                });
     }
     //
     function OnNewGameClick() {
@@ -146,9 +160,7 @@
                 success: function (msg)
                 {
                     console.log("OnCellSelected on true");
-
                     alert("Ô này " + msg);
-
                     console.log("this "+ msg);
                 }
             });
@@ -162,12 +174,26 @@
                 data: {},
                 success: function (msg)
                 {
-
                     location.reload(true);
                     alert(msg);
                     console.log("OnSolveClick true");
                 }
         });
+    }
+
+    function OnCompleteClick() {
+        console.log("OnCompleteClick");
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("PostComplete","Home")",
+            data: {},
+            success: function (msg) {
+                location.reload(true);
+                alert(msg);
+                console.log("OnCompleteClick true");
+            }
+        })
     }
 
     function uploadFiles() {
@@ -284,6 +310,7 @@
             <div class="choose row">
                 <p class="choose-text">Điều khiển trò chơi</p>
                 <input id="BtnSolve" class="btn btn-primary" type="button" value="Solve" onclick="OnSolveClick()" />
+                <input id="BtnComplete" class="btn btn-primary" type="button" value="Solve" onclick="OnCompleteClick()" />
                 <input id="BtnCheckOneCell" class="btn btn-primary" type="button" value="Check One Cell" onclick="OnCheckOneCell()" />
                 <input id="BtnReset" class="btn btn-primary" type="button" value="Reset Cells" onclick="ResetCell()" />
             </div>

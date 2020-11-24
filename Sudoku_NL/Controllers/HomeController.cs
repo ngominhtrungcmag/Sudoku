@@ -45,7 +45,7 @@ namespace Sudoku_NL.Controllers
             int i, j;
             i = SudokuModels.SudokuGame.SelectedCell.Row;
             j = SudokuModels.SudokuGame.SelectedCell.Column;
-            Console.WriteLine("Message from home Controller CheckOneCell:" + SudokuModels.SudokuGame.Cells[i,j].Value);
+            Console.WriteLine("Message from home Controller CheckOneCell:" + SudokuModels.SudokuGame.Cells[i, j].Value);
             return (SudokuModels.SudokuGame.CheckOneCell(i, j));
         }
         //Nhận giá trị từ client
@@ -65,7 +65,6 @@ namespace Sudoku_NL.Controllers
         public ActionResult PostNewGame(int difficult)
         {
             SudokuModels.SudokuGame.NewGame(difficult);
-            Console.WriteLine("Do kho: " + difficult);
             return RedirectToAction("Index");
         }
 
@@ -127,9 +126,7 @@ namespace Sudoku_NL.Controllers
         [HttpPost]
         public string PostSolve()
         {
-            Console.WriteLine("PostSolve");
             bool validResult = SudokuModels.SudokuGame.SolveGame();
-            Console.WriteLine("This is validResult Controller: "+ validResult);
             if (validResult)
             {
                 return "Giải thành công!";
@@ -139,10 +136,32 @@ namespace Sudoku_NL.Controllers
                 return "Giải không thành công!";
             }
         }
+
+        [HttpPost]
+        public string PostComplete()
+        {
+            bool validResult = SudokuModels.SudokuGame.CheckComplete();
+            if (validResult)
+            {
+                return "Chúc mừng bạn đã giải đúng!";
+            }
+            else
+            {
+                return "Bạn giải sai rồi. Làm lại đi nhấn reset nào!";
+            }
+        }
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
         }
 
         public IActionResult AboutAuthur()
