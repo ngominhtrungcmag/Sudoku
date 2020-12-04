@@ -76,21 +76,7 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-/*.GameGrid{
-    margin-left:auto;
-    margin-right:auto;
-}
 
-.GameCell{
-    margin:0px;
-    padding: 0px;
-}
-
-    .GameCell input {
-        width: 40px;
-        height: 40px;
-        text-align: center;
-    }*/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -99,7 +85,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 .box1 table {
-    border: 2px solid #000000;
+    border: 1px solid #808080;
 }
 
 .box1 td {
@@ -122,8 +108,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .box1 input:disabled {
-        background-color: #EEEEEE;
-    }
+    background-color: #EEEEEE;
+ }
 
 
 .content{
@@ -135,26 +121,22 @@ input[type=number]::-webkit-outer-spin-button {
     display: flex;
     margin: 15px;
     padding: 2px;
-    border: 2px solid #000000;
-    border-radius: 5px;
 }
 
-.choose-text{
-    margin-right: 5px;
+.form-check{
+    width: 100%;
 }
-.row{
+
+.row {
     flex-direction: row;
 }
 .box1 {
     margin: auto;
-    margin-right: 10px;
-    padding: auto;
     width: auto;
 }
 .box2 {
+    border: solid 1px;
     margin: auto;
-    margin-left:10px;
-    padding: auto;
     width: auto;
 }
 
@@ -163,5 +145,29 @@ input[type=number]::-webkit-outer-spin-button {
     margin-top: 20px;
 }
 .newgame{
-    width:100%; 
+    margin-left: 5px;
+}
+
+.Btn-Number{
+    margin: 5px;
+}
+
+.suggest-button{
+    margin: auto;
+    width: auto;
+    height: auto;
+}
+
+.file-input {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.dropdown{
+ 
+}
+.btn{
+    margin-left:5px;
 }

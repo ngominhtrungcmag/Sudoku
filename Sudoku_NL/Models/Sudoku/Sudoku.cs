@@ -202,6 +202,7 @@ namespace Sudoku_NL.Models
                     Cells[i, j].Column = j;
                     Cells[i, j].Value = 0;
                     Cells[i, j].ReadOnly = false;
+                    Cells[i, j].Hightlight = false;
                     Cells[i, j].Possible = GetFullList();
                 }
             }
@@ -221,6 +222,7 @@ namespace Sudoku_NL.Models
                     CellsRoot[i, j].Column = j;
                     CellsRoot[i, j].Value = 0;
                     CellsRoot[i, j].ReadOnly = false;
+                    CellsRoot[i, j].Hightlight = false;
                     CellsRoot[i, j].Possible = GetFullList();
                 }
             }
@@ -241,6 +243,7 @@ namespace Sudoku_NL.Models
                     Result[i, j].Row = i;
                     Result[i, j].Value = 0;
                     Result[i, j].ReadOnly = false;
+                    Result[i, j].Hightlight = false;
                     Result[i, j].Possible = GetFullList();
                 }
             }
@@ -252,13 +255,32 @@ namespace Sudoku_NL.Models
             countResult = 0;
             SolveSudoku(Cells, 0, 0);
 
-            if ((Cells[i, j].Value != 0) && (Cells[i, j].Value != Result[i, j].Value))
+            if ((Cells[i, j].Value != 0) && (Cells[i, j].Value != Result[i, j].Value) | (Result[i,j].Value ==0))
             {
                 valid = false;
             }
             return valid;
         }
 
+        public void CheckAllCells()
+        {
+            countResult = 0;
+            SolveSudoku(Cells, 0, 0);
+            for (int i = 0;i < 9; i++)
+            { 
+                for(int j=0; j <9; j++)
+                {
+                    if ((Cells[i, j].Value != 0) && (Cells[i, j].Value != Result[i, j].Value))
+                    {
+                        Cells[i, j].Hightlight = true;
+                    }
+                    else
+                    {
+                        Cells[i, j].Hightlight = false;
+                    }
+                }
+            }
+        }
 
         public void CreateRandom()
         {

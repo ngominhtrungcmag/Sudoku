@@ -1,4 +1,3 @@
-
 @model Sudoku
 
 @{
@@ -8,29 +7,31 @@
 <script>
 //
     $(document).ready(function () {
-       // ResetPossible();
         BorderGird();
     });
+
 // css gird
+
     function BorderGird() {
         for (var i = 0; i < 9; i++) {
-            document.getElementById("0_" + i).style.borderTop = "2px solid #000000";
-            document.getElementById("3_" + i).style.borderTop = "2px solid #000000";
-            document.getElementById("6_" + i).style.borderTop = "2px solid #000000";
+            document.getElementById("0_" + i).style.borderTop = "1px solid #000000";
+            document.getElementById("3_" + i).style.borderTop = "1px solid #000000";
+            document.getElementById("6_" + i).style.borderTop = "1px solid #000000";
 
-            document.getElementById(i+ "_0").style.borderLeft = "2px solid #000000";
-            document.getElementById(i + "_3").style.borderLeft = "2px solid #000000";
-            document.getElementById(i + "_6").style.borderLeft = "2px solid #000000";
+            document.getElementById(i+ "_0").style.borderLeft = "1px solid #000000";
+            document.getElementById(i + "_3").style.borderLeft = "1px solid #000000";
+            document.getElementById(i + "_6").style.borderLeft = "1px solid #000000";
 
-            document.getElementById(i + "_2").style.borderRight = "2px solid #000000";
-            document.getElementById(i + "_5").style.borderRight = "2px solid #000000";
-            document.getElementById(i + "_8").style.borderRight = "2px solid #000000";
+            document.getElementById(i + "_2").style.borderRight = "1px solid #000000";
+            document.getElementById(i + "_5").style.borderRight = "1px solid #000000";
+            document.getElementById(i + "_8").style.borderRight = "1px solid #000000";
 
-            document.getElementById("2_" + i).style.borderBottom = "2px solid #000000";
-            document.getElementById("5_" + i).style.borderBottom = "2px solid #000000";
-            document.getElementById("8_" + i).style.borderBottom = "2px solid #000000";
+            document.getElementById("2_" + i).style.borderBottom = "1px solid #000000";
+            document.getElementById("5_" + i).style.borderBottom = "1px solid #000000";
+            document.getElementById("8_" + i).style.borderBottom = "1px solid #000000";
         }
     }
+
  //
     function test() {
         var CellSelected = @Model.SelectedCell.Value;
@@ -39,17 +40,7 @@
         }
     }
 //
-    function ResetPossible(){
-       $.ajax({
-                type: 'GET',
-                url: "@Url.Action("ResetPossible", "Home")",
-                data: {},
-                success: function (msg) {
-                    console.log("ResetPossible");
-                }
-            });
-    }
-//
+
     function ResetCell() {
         $.ajax({
             type: "POST",
@@ -67,8 +58,16 @@
         cell.focus();
     }
 //
+    function hiddenButton() {
+        for (var i = 1; i <= 9; i++) {
+            var mybtn = document.getElementById("BtnNumber"+i);
+            mybtn.type="hidden";
+        }
+    }
+
     function OnCellSelected(cell)
-     {
+    {
+        hiddenButton();
         var res = cell.id.split("_");
         var i = res[0];
         var j = res[1];
@@ -78,7 +77,14 @@
                 url: "@Url.Action("GetSelectedCell", "Home")",
                 data: {i: i, j: j},
                 success: function (msg) {
-                    document.getElementById("PossibleString").innerHTML = msg.split(",");
+                    if (document.getElementById("OnSuggest").checked) {
+                        var possible = msg.split(",");
+                        possible.forEach(function (entry) {
+                            console.log("_" + entry + "_");
+                            var btn = "BtnNumber" + entry;
+                            document.getElementById(btn).type = "button";
+                        });
+                    }
                     console.log("OnCellSelected on true");
                 }
             });
@@ -95,7 +101,6 @@
             val = val.substring(0, 1);
             cell.value = val;
 
-        var Possible = document.getElementById("PossibleString").innerHTML;
         if (val == "") { val = "0"; }
 
                 $.ajax({
@@ -104,50 +109,27 @@
                     url: "@Url.Action("GetCellValue", "Home")",
                     data: { i: i, j: j, val: val },
                     success: function () {
-                        location.reload(true);
+                        //location.reload(true);
                         console.log("OnCellInput is true");
                     }
                 });
     }
-    function OnCellInput(cell)
-        {
-            var res = cell.id.split("_");
-            var i = res[0];
-            var j = res[1];
 
-            var val = cell.value;
-            val = val.replace(/[^\d]/, '');
-            val = val.substring(0, 1);
-            cell.value = val;
-
-        var Possible = document.getElementById("PossibleString").innerHTML;
-        if (val == "") { val = "0"; }
-                $.ajax({
-                    type: 'POST',
-                    dataType: "text",
-                    url: "@Url.Action("GetCellValue", "Home")",
-                    data: { i: i, j: j, val: val },
-                    success: function () {
-                        location.reload(true);
-                        console.log("OnCellInput is true");
-                    }
-                });
-    }
     //
     function OnNewGameClick() {
         var difficult = 40;
         if (document.getElementById("easy").checked) difficult = 20;
         if (document.getElementById("difficult").checked) difficult = 60;
          $.ajax({
-                type: 'POST',
+             type: 'POST',
              url: "@Url.Action("PostNewGame", "Home")",
              data: { difficult: difficult },
-                success: function ()
-                {
-                    location.reload(true);
-                    alert("Completed");
-                }
-            });
+             success: function ()
+             {
+                location.reload(true);
+                alert("Completed");
+             }
+         });
     }
     //
     function OnCheckOneCell() {
@@ -160,12 +142,17 @@
                 success: function (msg)
                 {
                     console.log("OnCellSelected on true");
-                    alert("Ô này " + msg);
-                    console.log("this "+ msg);
+                    if (msg == true) {
+                        alert("Ô này đúng rồi!")
+                    }
+                    else {
+                        alert("Ô này sai nha!");
+                    }
                 }
             });
         }
     }
+//
     function OnSolveClick() {
         console.log("OnSolveClick Run");
         $.ajax({
@@ -180,22 +167,38 @@
                 }
         });
     }
-
+//
     function OnCompleteClick() {
         console.log("OnCompleteClick");
-
-        $.ajax({
-            type: 'POST',
-            url: "@Url.Action("PostComplete","Home")",
-            data: {},
-            success: function (msg) {
-                location.reload(true);
-                alert(msg);
-                console.log("OnCompleteClick true");
+        var check = true;
+        for (var i = 0; i < 9; i++)
+        {
+            for (var j = 0; j < 9; j++)
+            {
+                if (document.getElementById(i + "_" + j).value == 0) {
+                    check = false;
+                    break;
+                }
             }
-        })
-    }
+        }
+        if (check) {
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("PostComplete","Home")",
+                data: {},
+                success: function (msg) {
+                    location.reload(true);
+                    alert(msg);
+                    console.log("OnCompleteClick true");
+                }
+            })
+        }
+        else {
+            alert("Bạn vui lòng nhập đầy đủ các ô");
+        }
 
+    }
+//
     function uploadFiles() {
         var path = document.getElementById("myfile").innerHTML;
         if (document.getElementById("myfile").files.length != 0 ) {
@@ -230,7 +233,9 @@
     <h1 class="display-4 text-center">Game Sudoku</h1>
 
     <div class="content row">
+
         <div class="box1">
+
             @if (Model != null)
             {
                 <p id="test"></p>
@@ -278,47 +283,63 @@
         </div>
 
         <div class="box2">
-
             <div class="choose row">
-                <p class="choose-text">Chọn mức độ:</p>
-                <form>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="easy" value="">
-                        <label class="form-check-label" for="easy">Dễ</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="medium" value="">
-                        <label class="form-check-label" for="medium">Vừa thôi</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="difficult" value="">
-                        <label class="form-check-label" for="difficult">Khó á</label>
-
-                    </div>
-                </form>
-
+                <p class="choose-text"></p>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Chọn độ khó
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <input class="form-check-input" type="radio" id="easy" value="">
+                            <label class="form-check-label" for="easy">Dễ</label>
+                        </li>
+                        <li>
+                            <input class="form-check-input" type="radio" id="medium" value="">
+                            <label class="form-check-label" for="medium">Trung bình</label>
+                        </li>
+                        <li>
+                            <input class="form-check-input" type="radio" id="difficult" value="">
+                            <label class="form-check-label" for="difficult">Khó</label>
+                        </li>
+                    </ul>
+                </div>
                 <input id="BtnNewGame" class="btn btn-primary newgame" type="button" value="New Game" onclick="OnNewGameClick()" />
             </div>
 
             <div class="choose row">
-                <p class="choose-text">Tải tập tin lên</p>
-                <input type="file" id="myfile" class="required" />
-                <button type="button" value="Load Game" class="btn btn-info" onclick="uploadFiles()">Load File</button>
+                <input type="file" id="myfile" class="btn file-input" />
+                <button type="button" value="Load Game" class="btn btn-info" onclick="uploadFiles()">Load game</button>
             </div>
 
-
             <div class="choose row">
-                <p class="choose-text">Điều khiển trò chơi</p>
                 <input id="BtnSolve" class="btn btn-primary" type="button" value="Solve" onclick="OnSolveClick()" />
-                <input id="BtnComplete" class="btn btn-primary" type="button" value="Solve" onclick="OnCompleteClick()" />
+                <input id="BtnComplete" class="btn btn-primary" type="button" value="Complete" onclick="OnCompleteClick()" />
                 <input id="BtnCheckOneCell" class="btn btn-primary" type="button" value="Check One Cell" onclick="OnCheckOneCell()" />
                 <input id="BtnReset" class="btn btn-primary" type="button" value="Reset Cells" onclick="ResetCell()" />
             </div>
 
+            <div class="choose row">
+                <!-- Material unchecked -->
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="OnSuggest">
+                    <label class="form-check-label" for="OnSuggest">Gợi ý</label>
+                </div>
+                <br />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber1" value="1" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber2" value="2" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber3" value="3" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber4" value="4" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber5" value="5" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber6" value="6" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber7" value="7" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber8" value="8" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber9" value="9" />
+            </div>
 
             <div class="choose row">
-                <p class="choose-text">Xuất thành tập tin</p>
-                <a class="btn btn-success" asp-action="TestFile" asp-controller="Home">Tải về</a>
+                <a class="btn btn-success" asp-action="TestFile" asp-controller="Home">Save game</a>
             </div>
 
         </div>

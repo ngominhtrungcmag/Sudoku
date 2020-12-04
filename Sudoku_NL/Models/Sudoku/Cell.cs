@@ -10,6 +10,7 @@ namespace Sudoku_NL.Models
         public int Row { get; set; }
         public int Column { get; set; }
         public List<int> Possible = new List<int>();
+        public bool Hightlight { get; set; }
         public string PossibleString
         {
             get
@@ -27,7 +28,6 @@ namespace Sudoku_NL.Models
                 {
                     return str;
                 }
-
             }
         }
         private int _value;
@@ -69,6 +69,7 @@ namespace Sudoku_NL.Models
             Row = source.Row;
             Column = source.Column;
             ReadOnly = source.ReadOnly;
+            Hightlight = source.Hightlight;
         }
     }
 }

@@ -48,6 +48,15 @@ namespace Sudoku_NL.Controllers
             Console.WriteLine("Message from home Controller CheckOneCell:" + SudokuModels.SudokuGame.Cells[i, j].Value);
             return (SudokuModels.SudokuGame.CheckOneCell(i, j));
         }
+
+        [HttpGet]
+        public IActionResult CheckAllCells()
+        {
+            Console.WriteLine("Message from home Controller CheckAllCells");
+            SudokuModels.SudokuGame.CheckAllCells();
+            return RedirectToAction("Index");
+        }
+
         //Nhận giá trị từ client
         [HttpPost]
         public ActionResult GetCellValue(int i, int j, string val)
@@ -67,7 +76,6 @@ namespace Sudoku_NL.Controllers
             SudokuModels.SudokuGame.NewGame(difficult);
             return RedirectToAction("Index");
         }
-
 
         #region File upload
         private IWebHostEnvironment iwebHostEnvironment;
@@ -150,7 +158,6 @@ namespace Sudoku_NL.Controllers
                 return "Bạn giải sai rồi. Làm lại đi nhấn reset nào!";
             }
         }
-
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
