@@ -34,7 +34,8 @@ namespace Sudoku_NL.Controllers
             if (WithinRange(i) && WithinRange(j))
             {
                 SudokuModels.SudokuGame.UpdatePossible();
-                SudokuModels.SudokuGame.SelectedCell = SudokuModels.SudokuGame.Cells[i, j];
+                SudokuModels.SudokuGame.SelectedCell.CopyCell(SudokuModels.SudokuGame.Cells[i, j]);
+                Console.WriteLine("Message form getselectedcell: " + SudokuModels.SudokuGame.SelectedCell.Id);
             }
             return SudokuModels.SudokuGame.SelectedCell.PossibleString;
         }
@@ -63,9 +64,11 @@ namespace Sudoku_NL.Controllers
         {
             int value = Int32.Parse(val);
             {
+                Console.WriteLine(val);
                 SudokuModels.SudokuGame.Cells[i, j].Value = value;
                 SudokuModels.SudokuGame.UpdatePossible();
-                SudokuModels.SudokuGame.SelectedCell = SudokuModels.SudokuGame.Cells[i, j];
+                SudokuModels.SudokuGame.SelectedCell.CopyCell(SudokuModels.SudokuGame.Cells[i, j]);
+                Console.WriteLine(SudokuModels.SudokuGame.SelectedCell.Id);
             }
             return RedirectToAction("Index");
         }

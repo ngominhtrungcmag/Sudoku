@@ -8,6 +8,9 @@
 //
     $(document).ready(function () {
         BorderGird();
+        if (!document.getElementById("OnSuggest").checked) {
+            hiddenButton();
+        }
     });
 
 // css gird
@@ -60,8 +63,11 @@
 //
     function hiddenButton() {
         for (var i = 1; i <= 9; i++) {
-            var mybtn = document.getElementById("BtnNumber"+i);
-            mybtn.type="hidden";
+            var mybtn = document.getElementById("BtnNumber" + i);
+            mybtn.type = "button";
+            mybtn.disabled = true;
+            mybtn.style.border = "thick solid #7a7a7a";
+            mybtn.style.background = "#7a7a7a";
         }
     }
 
@@ -72,6 +78,7 @@
         var i = res[0];
         var j = res[1];
         var val = cell.id.value;
+        document.getElementById("idSelectedCell").value = cell.id;
             $.ajax({
                 type: 'GET',
                 url: "@Url.Action("GetSelectedCell", "Home")",
@@ -80,9 +87,11 @@
                     if (document.getElementById("OnSuggest").checked) {
                         var possible = msg.split(",");
                         possible.forEach(function (entry) {
-                            console.log("_" + entry + "_");
+                            //console.log("_" + entry + "_");
                             var btn = "BtnNumber" + entry;
-                            document.getElementById(btn).type = "button";
+                            //document.getElementById(btn).type = "button";
+                            document.getElementById(btn).disabled = false;
+                            document.getElementById(btn).style.background = "#007bff";
                         });
                     }
                     console.log("OnCellSelected on true");
@@ -113,6 +122,25 @@
                         console.log("OnCellInput is true");
                     }
                 });
+    }
+
+    function InputSuggest(val) {
+        var id = document.getElementById("idSelectedCell").value;
+        var res = id.split("_");
+        var i = res[0];
+        var j = res[1];
+        document.getElementById(id).value = val;
+        console.log(id);
+        $.ajax({
+            type: 'POST',
+            dataType: "text",
+            url: "@Url.Action("GetCellValue", "Home")",
+            data: { i: i, j: j, val: val },
+            success: function () {
+            //location.reload(true);
+            console.log("OnCellInput is true");
+            }
+        });
     }
 
     //
@@ -327,15 +355,16 @@
                     <label class="form-check-label" for="OnSuggest">Gợi ý</label>
                 </div>
                 <br />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber1" value="1" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber2" value="2" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber3" value="3" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber4" value="4" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber5" value="5" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber6" value="6" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber7" value="7" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber8" value="8" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber9" value="9" />
+                <input type="hidden" id="idSelectedCell" value=""/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber1" value="1" onclick="InputSuggest(1)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber2" value="2" onclick="InputSuggest(2)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber3" value="3" onclick="InputSuggest(3)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber4" value="4" onclick="InputSuggest(4)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber5" value="5" onclick="InputSuggest(5)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber6" value="6" onclick="InputSuggest(6)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber7" value="7" onclick="InputSuggest(7)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber8" value="8" onclick="InputSuggest(8)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber9" value="9" onclick="InputSuggest(9)"/>
             </div>
 
             <div class="choose row">

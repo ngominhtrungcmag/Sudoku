@@ -121,6 +121,8 @@ input[type=number]::-webkit-outer-spin-button {
     display: flex;
     margin: 15px;
     padding: 2px;
+    background-color: #9f9e9e;
+    margin-inline: auto;
 }
 
 .form-check{
@@ -133,8 +135,10 @@ input[type=number]::-webkit-outer-spin-button {
 .box1 {
     margin: auto;
     width: auto;
+    padding: 0;
 }
 .box2 {
+    padding: 0;
     border: solid 1px;
     margin: auto;
     width: auto;
