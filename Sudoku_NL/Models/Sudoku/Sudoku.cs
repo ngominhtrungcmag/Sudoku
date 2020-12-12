@@ -25,7 +25,7 @@ namespace Sudoku_NL.Models
         int Difficult = 30;
         int countResult = 0;
         public bool Creating = false;
-
+        public bool Suggest = false;
         //Khởi tạo Sudoku
         public Sudoku()
         {
@@ -254,7 +254,7 @@ namespace Sudoku_NL.Models
             bool valid = true;
             countResult = 0;
             SolveSudoku(Cells, 0, 0);
-
+            Console.WriteLine("Message from model checkonecell"+i+"_"+j);
             if ((Cells[i, j].Value != 0) && (Cells[i, j].Value != Result[i, j].Value) | (Result[i,j].Value ==0))
             {
                 valid = false;
@@ -272,11 +272,11 @@ namespace Sudoku_NL.Models
                 {
                     if ((Cells[i, j].Value != 0) && (Cells[i, j].Value != Result[i, j].Value))
                     {
-                        Cells[i, j].Hightlight = true;
+                        Cells[i, j].Hightlight = false;
                     }
                     else
                     {
-                        Cells[i, j].Hightlight = false;
+                        Cells[i, j].Hightlight = true;
                     }
                 }
             }

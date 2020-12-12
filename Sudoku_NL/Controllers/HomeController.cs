@@ -36,6 +36,7 @@ namespace Sudoku_NL.Controllers
                 SudokuModels.SudokuGame.UpdatePossible();
                 SudokuModels.SudokuGame.SelectedCell.CopyCell(SudokuModels.SudokuGame.Cells[i, j]);
                 Console.WriteLine("Message form getselectedcell: " + SudokuModels.SudokuGame.SelectedCell.Id);
+                Console.WriteLine("Message from getselectedcell value = " + SudokuModels.SudokuGame.SelectedCell.Value);
             }
             return SudokuModels.SudokuGame.SelectedCell.PossibleString;
         }
@@ -51,11 +52,26 @@ namespace Sudoku_NL.Controllers
         }
 
         [HttpGet]
-        public IActionResult CheckAllCells()
+        public string CheckAllCells()
         {
             Console.WriteLine("Message from home Controller CheckAllCells");
             SudokuModels.SudokuGame.CheckAllCells();
-            return RedirectToAction("Index");
+            return "Co roi";
+        }
+
+
+        [HttpGet]
+        public bool SuggestState()
+        {
+            if (SudokuModels.SudokuGame.Suggest == true)
+            {
+                SudokuModels.SudokuGame.Suggest = false;
+            }
+            else
+            {
+                SudokuModels.SudokuGame.Suggest = true;
+            }
+            return (SudokuModels.SudokuGame.Suggest);
         }
 
         //Nhận giá trị từ client

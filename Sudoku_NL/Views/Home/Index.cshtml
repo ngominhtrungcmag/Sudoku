@@ -8,11 +8,42 @@
 //
     $(document).ready(function () {
         BorderGird();
+       // document.getElementById("OnSuggest").checked = true;              
         if (!document.getElementById("OnSuggest").checked) {
             hiddenButton();
         }
+       //CheckAllCells();
     });
 
+    function SuggestState() {
+        $.ajax({
+        type: 'GET',
+            url: "@Url.Action("SuggestState", "Home")",
+            data: {},
+            success: function (msg) {
+                location.reload(true);
+                if (msg == "true") {
+                    document.getElementById("OnSuggest").checked = true;
+                }
+                else {
+                    document.getElementById("OnSuggest").checked = false;              
+                }
+
+            }
+        });
+    }
+    function CheckAllCells() {
+
+        $.ajax({
+            type: 'GET',
+            url: "@Url.Action("CheckAllCells", "Home")",
+            data: {},
+                success: function (data) {
+                    //location.reload(true);
+                    console.log(data);
+                }
+        });
+    }
 // css gird
 
     function BorderGird() {
@@ -48,7 +79,7 @@
         $.ajax({
             type: "POST",
             url: "@Url.Action("ResetCell", "Home")",
-            success: function () {
+            sucModelodelHtmltRawmlss: function () {
                 location.reload(true);
             }
         });
@@ -104,7 +135,6 @@
             var res = cell.id.split("_");
             var i = res[0];
             var j = res[1];
-
             var val = cell.value;
             val = val.replace(/[^\d]/, '');
             val = val.substring(0, 1);
@@ -161,8 +191,7 @@
     }
     //
     function OnCheckOneCell() {
-        if (@Model.SelectedCell.Value != 0) {
-            console.log(@Model.SelectedCell.Value);
+        @*if (@Model.SelectedCell.Value != 0)*@ {
             $.ajax({
                 type: 'GET',
                 url: "@Url.Action("CheckOneCell", "Home")",
@@ -345,30 +374,32 @@
                 <input id="BtnSolve" class="btn btn-primary" type="button" value="Solve" onclick="OnSolveClick()" />
                 <input id="BtnComplete" class="btn btn-primary" type="button" value="Complete" onclick="OnCompleteClick()" />
                 <input id="BtnCheckOneCell" class="btn btn-primary" type="button" value="Check One Cell" onclick="OnCheckOneCell()" />
+                <input id="BtnCheckOneCell" class="btn btn-primary" type="button" value="Check All Cell" onclick="CheckAllCells()" />
                 <input id="BtnReset" class="btn btn-primary" type="button" value="Reset Cells" onclick="ResetCell()" />
             </div>
 
             <div class="choose row">
                 <!-- Material unchecked -->
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="OnSuggest">
+                    <input type="checkbox" class="form-check-input" id="OnSuggest" onclick="SuggestState()">
                     <label class="form-check-label" for="OnSuggest">Gợi ý</label>
                 </div>
-                <br />
-                <input type="hidden" id="idSelectedCell" value=""/>
+
+                <br/>
+                <input type="hidden" id="idSelectedCell" value="" />
                 <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber1" value="1" onclick="InputSuggest(1)" />
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber2" value="2" onclick="InputSuggest(2)"/>
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber3" value="3" onclick="InputSuggest(3)"/>
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber4" value="4" onclick="InputSuggest(4)"/>
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber5" value="5" onclick="InputSuggest(5)"/>
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber6" value="6" onclick="InputSuggest(6)"/>
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber7" value="7" onclick="InputSuggest(7)"/>
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber8" value="8" onclick="InputSuggest(8)"/>
-                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber9" value="9" onclick="InputSuggest(9)"/>
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber2" value="2" onclick="InputSuggest(2)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber3" value="3" onclick="InputSuggest(3)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber4" value="4" onclick="InputSuggest(4)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber5" value="5" onclick="InputSuggest(5)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber6" value="6" onclick="InputSuggest(6)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber7" value="7" onclick="InputSuggest(7)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber8" value="8" onclick="InputSuggest(8)" />
+                <input type="hidden" class="btn btn-info Btn-Number" id="BtnNumber9" value="9" onclick="InputSuggest(9)" />
             </div>
 
             <div class="choose row">
-                <a class="btn btn-success" asp-action="TestFile" asp-controller="Home">Save game</a>
+                <a class="btn btn-info" asp-action="TestFile" asp-controller="Home">Save game</a>
             </div>
 
         </div>

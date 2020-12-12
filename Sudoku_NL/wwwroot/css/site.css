@@ -121,7 +121,7 @@ input[type=number]::-webkit-outer-spin-button {
     display: flex;
     margin: 15px;
     padding: 2px;
-    background-color: #9f9e9e;
+
     margin-inline: auto;
 }
 
@@ -139,9 +139,11 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .box2 {
     padding: 0;
-    border: solid 1px;
+    border: solid 1px #9f9e9e;
     margin: auto;
     width: auto;
+    background-color: #9f9e9e;
+    border-radius: 5px;
 }
 
 .btn {
