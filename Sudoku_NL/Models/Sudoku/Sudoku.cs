@@ -111,7 +111,6 @@ namespace Sudoku_NL.Models
             {
                 for (int j = 0; j < 9; j++)
                 {
-
                     CellsRoot[i, j].CopyCell(Cells[i, j]);
                 }
             }
@@ -160,9 +159,7 @@ namespace Sudoku_NL.Models
             Clear();
             Completed = false;
             Creating = true;
-
             CreateRandom();
-
             solution = new Sudoku(this);
         }
 
@@ -187,7 +184,6 @@ namespace Sudoku_NL.Models
 
         public void Clear()
         {
-
             Completed = false;
             NumCells = 0;
             for (int i = 0; i < 9; i++)
@@ -262,25 +258,6 @@ namespace Sudoku_NL.Models
             return valid;
         }
 
-        public void CheckAllCells()
-        {
-            countResult = 0;
-            SolveSudoku(Cells, 0, 0);
-            for (int i = 0;i < 9; i++)
-            { 
-                for(int j=0; j <9; j++)
-                {
-                    if ((Cells[i, j].Value != 0) && (Cells[i, j].Value != Result[i, j].Value))
-                    {
-                        Cells[i, j].Hightlight = true;
-                    }
-                    else
-                    {
-                        Cells[i, j].Hightlight = false;
-                    }
-                }
-            }
-        }
 
         public void CreateRandom()
         {
@@ -326,7 +303,7 @@ namespace Sudoku_NL.Models
             }
         }
 
-
+        //Sinh ngẫu nhiên các số trong ma trận 3x3 theo đường chéo 1-5-9
         public void FillDiagonal()
         {
             Clear();
@@ -358,14 +335,18 @@ namespace Sudoku_NL.Models
             return new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         }
 
-        //Này quan trọng nè: giải thuật giải sudoku
-
+        //Hàm giải game Sudoku
         public bool SolveGame()
         {
+            //Đặt biến đếm = 0
             countResult = 0;
             bool validResult = true;
+            //Xóa result 
             ClearResult();
+            //Gọi hàm SolveSudoku
             SolveSudoku(Cells, 0, 0);
+
+            //Kiểm tra xem nếu có ô nào có giá trị = 0 thì hàm sẽ có giá trị false
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -377,6 +358,7 @@ namespace Sudoku_NL.Models
                     }
                 }
             }
+            //Nếu validResult = true tức là có đáp án thì gán đáp án cho Cells 
             if (validResult)
             {
                 for (int i = 0; i < 9; i++)
@@ -395,7 +377,7 @@ namespace Sudoku_NL.Models
             return validResult;
         }
 
-        //Giải sudoku
+        //Giải sudoku backtracking
         public void SolveSudoku(Cell[,] CellsSolve, int x, int y)
         {
             //Nếu có 1 đáp án rồi thì dừng 
@@ -407,7 +389,7 @@ namespace Sudoku_NL.Models
             {
                 if (x == 8)
                 {
-                    //Return đáp án
+                    //Return đáp án và gán countResult để dừng không tìm đáp án khác nữa.
                     countResult++;
                     for (int i = 0; i < 9; i++)
                     {
@@ -426,16 +408,21 @@ namespace Sudoku_NL.Models
             else if (CellsSolve[x, y].Value == 0)
             {
                 int k = 0;
+                // Chạy từ 1 - 9 
                 for (k = 1; k <= 9; k++)
                 {
+                    //Nếu giá trị K hợp lệ thì gán cho đáp án
                     if (Feasible(CellsSolve, x, y, k))
                     {
                         CellsSolve[x, y].Value = k;
+                        //Đi tiếp đến ô thứ x, y+1
                         SolveSudoku(CellsSolve, x, y + 1);
+                        //Quay lui lại gán giá trị ô x,y = 0;
                         CellsSolve[x, y].Value = 0;
                     }
                 }
             }
+            //Nếu ô x, y có giá trị rồi thì gọi tiếp ô x, y+1
             else
             {
                 SolveSudoku(CellsSolve, x, y + 1);
@@ -473,11 +460,13 @@ namespace Sudoku_NL.Models
                     }
                 }
                 //Check box
+                //Kiểm tra ma trận 3x3
+                
             }    
             return true;
         }
 
-        //Kiểm tra hợp lệ
+        //Kiểm tra giá trị hợp lệ
         public bool Feasible(Cell[,] CellsSolve, int x, int y, int k)
         {
             int i = 0, j = 0;

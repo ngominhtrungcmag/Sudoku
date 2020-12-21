@@ -16,7 +16,6 @@ namespace Sudoku_NL.Controllers
 {
     public class HomeController : Controller
     {
-
         // GET: Sudoku
         public ActionResult Index()
         {
@@ -48,14 +47,6 @@ namespace Sudoku_NL.Controllers
             j = SudokuModels.SudokuGame.SelectedCell.Column;
             Console.WriteLine("Message from home Controller CheckOneCell:" + SudokuModels.SudokuGame.Cells[i, j].Value);
             return (SudokuModels.SudokuGame.CheckOneCell(i, j));
-        }
-
-        [HttpGet]
-        public IActionResult CheckAllCells()
-        {
-            Console.WriteLine("Message from home Controller CheckAllCells");
-            SudokuModels.SudokuGame.CheckAllCells();
-            return RedirectToAction("Index");
         }
 
         //Nhận giá trị từ client
@@ -103,9 +94,9 @@ namespace Sudoku_NL.Controllers
 
         #region Down File
         [HttpGet]
-        public ActionResult TestFile()
+        public ActionResult DownFile()
         {
-            Console.WriteLine("Run TestFile");
+            Console.WriteLine("Run DownFile");
             MemoryStream memoryStream = new MemoryStream();
             TextWriter tw = new StreamWriter(memoryStream);
             for (int i = 0; i < 9; i++)
