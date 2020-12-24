@@ -170,5 +170,10 @@ namespace Sudoku_NL.Controllers
             return View();
         }
 
+        public IActionResult UserManual()
+        {
+            return View();
+        }
+
     }
 }

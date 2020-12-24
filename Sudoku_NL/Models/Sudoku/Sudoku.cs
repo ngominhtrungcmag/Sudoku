@@ -459,10 +459,27 @@ namespace Sudoku_NL.Models
                         return false;
                     }
                 }
-                //Check box
-                //Kiểm tra ma trận 3x3
-                
-            }    
+            }
+            //Check box
+            //Kiểm tra 9 ma trận 3x3
+            for (int i = 2; i < 9; i += 3)
+            {
+                for (int j = 2; j < 9; j += 3)
+                {
+                    CheckList = GetFullList();
+                    for (int k = i-2; k <=i; k++)
+                    {
+                        for (int l = j-2; l<=j; l++)
+                        {
+                            if (CheckList.Contains(Cells[k, l].Value))
+                            {
+                                CheckList.Remove(Cells[k, l].Value);
+                            }
+                            else return false;
+                        }
+                    }
+                }
+            }
             return true;
         }
 
